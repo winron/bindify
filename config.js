@@ -1,8 +1,17 @@
 // Configuration for development and production environments
-const isDev = require('electron-is-dev');
-
 // Note: dotenv should be loaded in main.js and server.js before requiring config
 // This file assumes environment variables are already loaded
+
+// Determine if we're in development mode
+// electron-is-dev only works in Electron context, so handle both cases
+let isDev;
+try {
+  // Try to use electron-is-dev if we're in Electron
+  isDev = require('electron-is-dev');
+} catch (err) {
+  // If we're in Node.js (server context), use NODE_ENV
+  isDev = process.env.NODE_ENV !== 'production';
+}
 
 // Server configuration
 const SERVER_PORT = process.env.SERVER_PORT || 1212;
