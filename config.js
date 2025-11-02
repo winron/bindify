@@ -1,6 +1,17 @@
 // Configuration for development and production environments
 const isDev = require('electron-is-dev');
 
+// Load environment variables from .env file
+// Note: In Electron, we need to handle .env loading manually
+if (isDev) {
+  try {
+    require('dotenv').config();
+  } catch (err) {
+    // dotenv not installed or .env not found - that's okay
+    console.warn('dotenv not available, using environment variables or defaults');
+  }
+}
+
 // Server configuration
 const SERVER_PORT = process.env.SERVER_PORT || 1212;
 const SERVER_HOST = process.env.SERVER_HOST || 'localhost';
@@ -13,10 +24,13 @@ const REDIRECT_URI = process.env.REDIRECT_URI ||
     ? `http://${SERVER_HOST}:${SERVER_PORT}/authorize`
     : 'bindify://authorize'); // Custom protocol for production
 
-// WARNING: Remove hardcoded credentials in production
-// Use environment variables instead
-const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID || '1e6240791635424c9069296ce0ff8492';
-const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET || '0218655e8ff14d019342788dd96cf095';
+// Spotify OAuth credentials - MUST be set via environment variables
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+
+if (!CLIENT_ID || !CLIENT_SECRET) {
+  throw new Error('SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set in environment variables or .env file');
+}
 
 // Socket.IO configuration
 const SOCKET_URL = process.env.SOCKET_URL || 
