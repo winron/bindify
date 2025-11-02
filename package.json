@@ -1,0 +1,78 @@
+{
+  "name": "bindify",
+  "version": "1.0.0",
+  "description": "Bindify - Control your Spotify playback with customizable keyboard shortcuts",
+  "main": "./main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "concurrently \"npm run react-start\" \"npm run server-start\" \"wait-on http://localhost:3000 && npm run electron-dev\"",
+    "react-build": "cross-env NODE_OPTIONS=--openssl-legacy-provider craco build",
+    "react-start": "cross-env BROWSER=none NODE_OPTIONS=--openssl-legacy-provider craco start",
+    "server-build": "babel server --out-dir build-server",
+    "server-start": "nodemon --watch server --exec babel-node server/server.js",
+    "electron-dev": "node scripts/dev.js scripts/start.js",
+    "electron-pack": "electron-builder -c.extraMetadata.main='./main.js'",
+    "preelectron-pack": "npm run react-build && npm run server-build"
+  },
+  "author": "tbuyse",
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.1",
+    "@babel/node": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "concurrently": "^7.4.0",
+    "electron": "^38.2.2",
+    "electron-builder": "^23.3.3",
+    "electron-is-dev": "^3.0.1",
+    "electron-reloader": "^1.2.3",
+    "electron-store": "^8.2.0",
+    "react-scripts": "^4.0.0",
+    "wait-on": "^6.0.1"
+  },
+  "dependencies": {
+    "@craco/craco": "^6.4.5",
+    "app-module-path": "^2.2.0",
+    "axios": "^0.27.2",
+    "cross-env": "^7.0.3",
+    "express": "^4.18.1",
+    "iohook": "^0.9.3",
+    "nodemon": "^2.0.20",
+    "piping": "^1.0.0-rc.4",
+    "react": "^18.2.0",
+    "react-app-rewired": "^2.2.1",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.1",
+    "socket.io": "^4.5.2",
+    "socket.io-client": "^4.5.2",
+    "spotify-web-api-node": "^5.0.2",
+    "styled-components": "^5.3.6",
+    "uiohook-napi": "^1.5.4"
+  },
+  "build": {
+    "appId": "com.bindify.app",
+    "files": [
+      "build/**/**/*",
+      "build-server/**/**/*",
+      "node_modules/**/*",
+      "./main.js"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "browserslist": [],
+  "iohook": {
+    "targets": [
+      "node-88",
+      "electron-87"
+    ],
+    "platforms": [
+      "win32",
+      "darwin"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
+    ]
+  }
+}
