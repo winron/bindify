@@ -1,3 +1,15 @@
+// Load environment variables first
+// In development, we're always running the server directly, so load .env
+try {
+  require('dotenv').config();
+} catch (err) {
+  // dotenv not installed or .env not found - that's okay
+  console.warn('dotenv not available in server, using environment variables');
+}
+
+// Check if we're in development mode
+const isDev = process.env.NODE_ENV !== 'production';
+
 const express = require('express');
 const router = express();
 const server = require('http').createServer(router);

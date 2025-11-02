@@ -1,16 +1,8 @@
 // Configuration for development and production environments
 const isDev = require('electron-is-dev');
 
-// Load environment variables from .env file
-// Note: In Electron, we need to handle .env loading manually
-if (isDev) {
-  try {
-    require('dotenv').config();
-  } catch (err) {
-    // dotenv not installed or .env not found - that's okay
-    console.warn('dotenv not available, using environment variables or defaults');
-  }
-}
+// Note: dotenv should be loaded in main.js and server.js before requiring config
+// This file assumes environment variables are already loaded
 
 // Server configuration
 const SERVER_PORT = process.env.SERVER_PORT || 1212;

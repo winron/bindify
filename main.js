@@ -3,10 +3,21 @@ const { app, BrowserWindow, ipcMain, globalShortcut, protocol } = require('elect
 const shell = require('electron').shell;
 const path = require('path');
 const url = require('url');
+const isDev = require('electron-is-dev');
+
+// Load environment variables from .env file BEFORE requiring config
+// This must happen in the main process, not just in config.js
+if (isDev) {
+  try {
+    require('dotenv').config();
+  } catch (err) {
+    console.warn('dotenv not available, using environment variables or defaults');
+  }
+}
+
 const io = require('socket.io-client');
 const config = require('./config');
 const store = require('./src/renderer/classes/Store');
-const isDev = config.isDev;
 
 let pendingProtocolURL = null;
 
