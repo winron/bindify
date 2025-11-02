@@ -17,6 +17,14 @@ if (isDev) {
 
 const io = require('socket.io-client');
 const config = require('./config');
+
+// Verify credentials are loaded before proceeding
+if (!config.CLIENT_ID || !config.CLIENT_SECRET) {
+  console.error('ERROR: SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set in .env file');
+  console.error('Please create a .env file with your Spotify credentials');
+  process.exit(1);
+}
+
 const store = require('./src/renderer/classes/Store');
 
 let pendingProtocolURL = null;
@@ -103,6 +111,8 @@ try {
   }
 }
 
+// Spotify API is loaded after config is verified
+// This ensures credentials are available when the class is instantiated
 const spotifyWebApi = require('./src/renderer/classes/Spotify');
 const asyncLock = require('./src/renderer/classes/AsyncLock');
 
